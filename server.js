@@ -36,6 +36,10 @@ app.post("/addUser", async (req, res) => {
     client.close();
 });
 
+app.get("/", (req, res) => {
+    res.send("Welcome to the API!");
+});
+
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`);
