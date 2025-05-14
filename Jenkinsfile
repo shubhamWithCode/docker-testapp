@@ -14,25 +14,23 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                sh 'docker build -t vickygaikwad41996/node-app .'
-            }
-        }
+        // stage('Build Docker Image') {
+        //     steps {
+        //         sh 'docker build -t vickygaikwad41996/node-app .'
+        //     }
+        // }
 
-        stage('Push to Docker Hub') {
-            steps {
-                sh 'docker login -u vickygaikwad41996@gmail.com -p Shubham@1234'
-                sh 'docker push vickygaikwad41996/node-app'
-                }
-            }
-        }
+        // stage('Push to Docker Hub') {
+        //     steps {
+        //         sh 'docker login -u vickygaikwad41996@gmail.com -p Shubham@1234'
+        //         sh 'docker push vickygaikwad41996/node-app'
+        //         }
+        //     }
+        // }
 
         stage('Deploy using Docker Compose') {
             steps {
-                sh 'docker-compose down || true'
-                sh 'docker-compose pull'
-                sh 'docker-compose up -d'
+                sh 'docker-compose -f Docker-compose.yaml $status'
             }
         }
     }
