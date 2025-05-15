@@ -36,7 +36,7 @@ pipeline {
 
         stage('docker run'){
             steps{
-                sh 'docker run -d -p 5050:5050 --name my-app ickygaikwad41996/node-app'
+                sh 'docker run -d -p 5050:5050 --name my-app vickygaikwad41996/node-app'
             }
         }
 
