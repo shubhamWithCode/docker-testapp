@@ -1,56 +1,40 @@
 pipeline {
     agent any
 
-    // environment {
-    //     DOCKER_IMAGE = 'your-dockerhub-username/your-node-app'
-    //     DOCKER_CREDENTIALS_ID = 'docker-hub-credentials'
-    // }
-
     stages {
-
-        stage('Checkout') {
+        stage('ps') {
             steps {
-                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/shubhamWithCode/docker-testapp.git']])
+                sh 'docker ps'
             }
         }
-
-        stage('Build Docker Image') {
+        
+        stage('Cleanup') {
             steps {
-                sh 'docker build -t vickygaikwad41996/node-app .'
+                deleteDir() // Cleans workspace
             }
         }
-
-        stage('Push to Docker Hub') {
+        
+        stage('git clone') {
             steps {
-                sh 'docker login -u vickygaikwad41996@gmail.com -p Shubham@1234'
-                sh 'docker push vickygaikwad41996/node-app'
+                sh 'git clone https://github.com/shubhamWithCode/docker-testapp.git'
+            }
+        }
+        
+        stage('docker build') {
+            steps {
+               dir('docker-testapp') {
+                    sh 'docker build -t vickygaikwad41996/test-app .'
                 }
             }
         }
-
-        // stage('Deploy using Docker Compose') {
-        //     steps {
-        //         sh 'docker-compose -f Docker-compose.yaml $status'
-        //     }
-        // }
-
-        stage('docker run'){
-            steps{
-                sh 'docker run -d -p 5050:5050 --name my-app vickygaikwad41996/node-app'
+        
+        stage('docker push') {
+            steps {
+                //sh 'docker run -d -p 5050:5050 --name node-app vickygaikwad/test-app'
+                sh 'docker login -u vickygaikwad41996@gmail.com -p Shubham@1234'
+                sh 'docker push vickygaikwad41996/test-app'
             }
         }
-
-    }
-
-    post {
-        always {
-            echo 'Pipeline completed.'
-        }
-        success {
-            echo 'Deployment successful!'
-        }
-        failure {
-            echo 'Deployment failed.'
-        }
+        
     }
 }
